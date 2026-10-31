@@ -1,6 +1,6 @@
 {
   "name": "dsh-rea-gateway",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "On-demand REA gateway for DeepSeek Harness: three fixed search, describe and call tools, native controls, cached schemas and durable image results.",
   "keywords": [
     "deepseek-harness",

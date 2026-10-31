@@ -6,6 +6,7 @@ window.__ModuleLoader__.load({
   id: 'dsh-rea-gateway',
   factory(require) {
     const React = require('react')
+    const { createPortal } = require('react-dom')
     const h = React.createElement
     const { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } = React
 
@@ -61,6 +62,17 @@ window.__ModuleLoader__.load({
         sessionTitle: '本会话的 REA 工具',
         sessionNote: '「默认」跟随全局设置。改动从下一步开始生效。',
         reset: '恢复默认',
+        resetSession: '恢复跟随全局',
+        collapse: '收起',
+        saving: '正在保存本会话设置…',
+        resetSaved: '已恢复跟随全局。',
+        selectionSaved: '已保存本会话设置。',
+        alreadyDefault: '本会话已跟随全局设置。',
+        scopeNote: '以下设置仅作用于本会话。',
+        enabledState: '当前已启用',
+        disabledState: '当前已停用',
+        followsGlobal: '跟随全局设置',
+        sessionOverride: '使用本会话设置',
         stateDefault: '默认',
         stateOn: '开',
         stateOff: '关',
@@ -95,6 +107,17 @@ window.__ModuleLoader__.load({
         sessionTitle: 'Capabilities in this session',
         sessionNote: '"Default" follows the global setting. Changes apply from the next step.',
         reset: 'Reset',
+        resetSession: 'Follow global',
+        collapse: 'Dismiss',
+        saving: 'Saving session settings…',
+        resetSaved: 'Following global settings.',
+        selectionSaved: 'Session settings saved.',
+        alreadyDefault: 'This session follows global settings.',
+        scopeNote: 'These controls affect this session only.',
+        enabledState: 'Currently enabled',
+        disabledState: 'Currently disabled',
+        followsGlobal: 'Following global settings',
+        sessionOverride: 'Using session settings',
         stateDefault: 'Default',
         stateOn: 'On',
         stateOff: 'Off',
@@ -148,16 +171,30 @@ window.__ModuleLoader__.load({
 .cc-seg button[aria-pressed=true]{background:var(--dsw-alias-bg-layer-2);color:var(--dsw-alias-label-primary);font-weight:600}
 .cc-seg button[data-value=off][aria-pressed=true]{color:var(--dsw-alias-state-error-primary)}
 .cc-seg button[data-value=on][aria-pressed=true]{color:var(--dsw-alias-state-success-primary)}
-.cc-trigger{display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 8px;border:none;border-radius:8px;background:transparent;color:var(--dsw-alias-label-secondary);font-size:12px;cursor:pointer}
+.cc-trigger{box-sizing:border-box;display:inline-flex;flex:none;align-items:center;justify-content:center;gap:5px;width:60px;height:24px;padding:0 6px;white-space:nowrap;border:1px solid var(--dsw-alias-border-l1,rgba(127,127,127,.4));border-radius:7px;background:transparent;color:var(--dsw-alias-label-primary,CanvasText);font-size:12px;line-height:1;cursor:pointer}
 .cc-trigger:hover,.cc-trigger[aria-expanded=true]{background:var(--dsw-alias-bg-layer-2);color:var(--dsw-alias-label-primary)}
-.cc-trigger-badge{color:var(--dsw-alias-state-warn-primary)}
+.cc-trigger,.cc-seg{--cc-choice-color:var(--dsw-alias-label-primary,CanvasText);--cc-choice-bg:rgba(255,255,255,.07)}
+.cc-trigger[data-state=on],.cc-seg[data-state=on]{--cc-choice-color:#4ade80;--cc-choice-bg:rgba(74,222,128,.1)}
+.cc-trigger[data-state=off],.cc-seg[data-state=off]{--cc-choice-color:#60a5fa;--cc-choice-bg:rgba(96,165,250,.1)}
+.cc-trigger[data-state=on],.cc-trigger[data-state=off]{border-color:var(--cc-choice-color);background:var(--cc-choice-bg);color:var(--cc-choice-color)}
 .cc-anchor{position:relative;display:inline-flex}
-.cc-popover{position:fixed;z-index:1000;box-sizing:border-box;width:380px;max-width:calc(100vw - 32px);display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:12px;border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-overlay);box-shadow:0 8px 28px rgba(0,0,0,.18);color:var(--dsw-alias-label-primary);font-size:13px}
+.cc-popover{position:fixed;z-index:1000;isolation:isolate;box-sizing:border-box;width:420px;max-width:calc(100vw - 24px);display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:12px;border:1px solid var(--dsw-alias-border-l1,rgba(127,127,127,.4));background-color:Canvas;background-image:linear-gradient(var(--dsw-alias-bg-layer-2,Canvas),var(--dsw-alias-bg-layer-2,Canvas));box-shadow:0 12px 36px rgba(0,0,0,.28);color:var(--dsw-alias-label-primary,CanvasText);font-size:13px;line-height:1.5;color-scheme:inherit}
 .cc-popover-head{display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:600}
-.cc-popover-body{overflow:auto;display:flex;flex-direction:column;gap:12px;margin:0 -4px;padding:0 4px}
+.cc-popover-body{min-height:0;overflow:auto;display:flex;flex-direction:column;gap:12px;margin:0 -4px;padding:0 4px}
 .cc-sub{font-size:12px;font-weight:600;color:var(--dsw-alias-label-secondary);margin-bottom:4px}
 .cc-mini-row{display:flex;align-items:center;gap:8px;padding:5px 0}
-.cc-mini-row .cc-row-main{gap:0}
+.cc-mini-row .cc-row-main{gap:2px;min-width:0}
+.cc-popover-head{flex-wrap:wrap}
+.cc-popover-head .cc-toolbar{margin-left:auto;flex-wrap:nowrap}
+.cc-popover .cc-btn{height:30px;padding:0 10px;background:var(--dsw-alias-bg-layer-1,Canvas);color:var(--dsw-alias-label-primary,CanvasText);border-color:var(--dsw-alias-border-l1,rgba(127,127,127,.4));white-space:nowrap}
+.cc-popover .cc-btn:disabled,.cc-popover .cc-seg button:disabled{opacity:.5;cursor:default}
+.cc-popover .cc-note,.cc-popover .cc-row-desc,.cc-popover .cc-sub{color:var(--dsw-alias-label-secondary,GrayText)}
+.cc-popover .cc-seg{border-color:var(--dsw-alias-border-l1,rgba(127,127,127,.4))}
+.cc-popover .cc-seg[data-state=on],.cc-popover .cc-seg[data-state=off]{border-color:var(--cc-choice-color)}
+.cc-popover .cc-seg button{height:30px;color:var(--dsw-alias-label-secondary,GrayText)}
+.cc-popover .cc-seg button[aria-pressed=true]{background:var(--cc-choice-bg);color:var(--cc-choice-color);box-shadow:inset 0 -2px currentColor}
+.cc-feedback{padding:8px 10px;border-radius:6px;background:var(--dsw-alias-bg-layer-1,Canvas);color:var(--dsw-alias-label-primary,CanvasText);font-size:12px}
+.cc-effective{font-size:12px;font-weight:600;color:var(--dsw-alias-label-primary,CanvasText)}
 `
 
     function ensureStyle() {
@@ -216,6 +253,7 @@ window.__ModuleLoader__.load({
         const data = await api.request({ action: 'set', ...request, ...(sessionId ? { sessionId } : {}) })
         generation.current++
         setState({ data, error: null, loading: false })
+        return data
       }, [api, sessionId])
       return { ...state, reload: load, set }
     }
@@ -228,11 +266,11 @@ window.__ModuleLoader__.load({
       })
     }
 
-    function Segmented({ value, onChange, t, label }) {
+    function Segmented({ value, onChange, t, label, disabled = false }) {
       const options = [['default', t.stateDefault, null], ['on', t.stateOn, true], ['off', t.stateOff, false]]
-      return h('div', { className: 'cc-seg', role: 'group', 'aria-label': label },
+      return h('div', { className: 'cc-seg', 'data-state': value === null ? 'default' : value ? 'on' : 'off', role: 'group', 'aria-label': label },
         options.map(([key, text, next]) => h('button', {
-          key, type: 'button', 'data-value': key, 'aria-pressed': value === next,
+          key, type: 'button', 'data-value': key, 'aria-pressed': value === next, disabled,
           onClick: () => onChange(next),
         }, text)))
     }
@@ -338,10 +376,18 @@ window.__ModuleLoader__.load({
       const [open, setOpen] = useState(false)
       const [query, setQuery] = useState('')
       const [placement, setPlacement] = useState(null)
+      const [busy, setBusy] = useState(false)
+      const [notice, setNotice] = useState('')
+      const [actionError, setActionError] = useState(null)
+      const busyRef = useRef(false)
       const anchor = useRef(null)
-      // Open toward the side with more room and stay inside the window. The popover is fixed to
-      // the viewport so scroll and clip containers of the composer cannot cut it off; the
-      // composer sits at the bottom in a session but in the middle of the window on a new one.
+      const trigger = useRef(null)
+      const popover = useRef(null)
+      const dismiss = useCallback(() => {
+        setOpen(false)
+        trigger.current?.focus()
+      }, [])
+      // Portal to the viewport so the composer's stacking and clipping cannot cover the panel.
       const place = useCallback(() => {
         const node = anchor.current
         if (!node) return
@@ -352,12 +398,10 @@ window.__ModuleLoader__.load({
         const below = window.innerHeight - rect.bottom - margin - gap
         const up = above >= 320 || above >= below
         const room = Math.max(160, Math.min(560, up ? above : below))
-        const width = Math.min(380, window.innerWidth - 2 * margin)
+        const width = Math.min(420, window.innerWidth - 2 * margin)
         const left = Math.max(margin, Math.min(rect.left, window.innerWidth - width - margin))
         setPlacement({
-          position: 'fixed',
-          left: `${left}px`,
-          width: `${width}px`,
+          position: 'fixed', left: `${left}px`, width: `${width}px`,
           ...(up ? { bottom: `${window.innerHeight - rect.top + gap}px` } : { top: `${rect.bottom + gap}px` }),
           maxHeight: `${room}px`,
         })
@@ -373,73 +417,96 @@ window.__ModuleLoader__.load({
         }
       }, [open, place])
       const { data, error, set, reload } = useOverview(api, sessionId, true)
-      const [actionError, setActionError] = useState(null)
-
       useEffect(() => { if (open) reload() }, [open, reload])
       useEffect(() => {
         if (!open) return undefined
-        const onKey = (event) => { if (event.key === 'Escape') setOpen(false) }
-        const onPointer = (event) => { if (anchor.current && !anchor.current.contains(event.target)) setOpen(false) }
+        const onKey = (event) => { if (event.key === 'Escape') dismiss() }
+        const onPointer = (event) => {
+          if (!anchor.current?.contains(event.target) && !popover.current?.contains(event.target)) setOpen(false)
+        }
         document.addEventListener('keydown', onKey)
         document.addEventListener('pointerdown', onPointer)
         return () => {
           document.removeEventListener('keydown', onKey)
           document.removeEventListener('pointerdown', onPointer)
         }
-      }, [open])
+      }, [open, dismiss])
 
       if (!sessionId || (data && !data.enabled)) return null
-      const offCount = data ? data.servers.filter((server) => !server.effective).length + data.skills.filter((skill) => !skill.effective).length : 0
-      const change = async (kind, name, value) => {
+      const rea = data?.servers.find((server) => server.name === 'rea')
+      const choice = rea ? (rea.session === null ? 'default' : rea.session ? 'on' : 'off') : null
+      const choiceLabel = choice === 'default' ? t.stateDefault : choice === 'on' ? t.stateOn : choice === 'off' ? t.stateOff : ''
+      const effectiveLabel = rea ? (rea.effective ? t.enabledState : t.disabledState) : ''
+      const hasOverrides = !!data && [...data.servers, ...data.skills].some((entry) => entry.session !== null)
+      const save = async (updates, message) => {
+        if (busyRef.current || updates.length === 0) return
+        busyRef.current = true
+        setBusy(true)
         setActionError(null)
+        setNotice('')
         try {
-          await set({ scope: 'session', kind, name, value })
+          let overview = data
+          for (const update of updates) overview = await set({ scope: 'session', ...update })
+          const states = overview.servers.map((server) => `${server.title} ${server.effective ? t.enabledState : t.disabledState}`).join('；')
+          setNotice(states ? `${message} ${states}` : message)
         } catch (err) {
           setActionError(err)
+        } finally {
+          busyRef.current = false
+          setBusy(false)
         }
       }
-      const reset = async () => {
+      const change = (kind, name, value) => save([{ kind, name, value }], value === null ? t.resetSaved : t.selectionSaved)
+      const reset = () => {
         if (!data) return
-        for (const server of data.servers) if (server.session !== null) await change('server', server.name, null)
-        for (const skill of data.skills) if (skill.session !== null) await change('skill', skill.name, null)
+        const updates = [
+          ...data.servers.filter((entry) => entry.session !== null).map((entry) => ({ kind: 'server', name: entry.name, value: null })),
+          ...data.skills.filter((entry) => entry.session !== null).map((entry) => ({ kind: 'skill', name: entry.name, value: null })),
+        ]
+        return save(updates, t.resetSaved)
       }
       const skills = data ? data.skills.filter((skill) => matches(skill, query)) : []
+      const panel = open ? h('div', {
+        ref: popover, className: 'cc-popover', role: 'dialog', 'aria-label': t.sessionTitle,
+        'aria-busy': busy, style: placement || { visibility: 'hidden' },
+      },
+        h('div', { className: 'cc-popover-head' },
+          h('span', null, t.sessionTitle),
+          h('span', { className: 'cc-toolbar' },
+            h('button', { type: 'button', className: 'cc-btn', onClick: reset, disabled: busy || !hasOverrides, title: !hasOverrides ? t.alreadyDefault : t.resetSession }, t.resetSession),
+            h('button', { type: 'button', className: 'cc-btn', onClick: dismiss }, t.collapse))),
+        h('div', { className: 'cc-note' }, t.sessionNote),
+        h('div', { className: 'cc-feedback', role: 'status', 'aria-live': 'polite', 'aria-atomic': true }, busy ? t.saving : notice || (hasOverrides ? t.scopeNote : t.alreadyDefault)),
+        error ? h('div', { className: 'cc-warn' }, format(t.error, { message: error.message })) : null,
+        actionError ? h('div', { className: 'cc-warn', role: 'alert' }, format(t.error, { message: actionError.message })) : null,
+        !data ? h('div', { className: 'cc-note' }, t.loading) : h('div', { className: 'cc-popover-body' },
+          data.servers.length > 0 ? h('div', null,
+            h('div', { className: 'cc-sub' }, t.servers),
+            data.servers.map((server) => h('div', { className: 'cc-mini-row', key: server.name },
+              h('div', { className: 'cc-row-main' },
+                h('div', { className: 'cc-row-name' }, server.title),
+                h('div', { className: 'cc-effective', 'data-enabled': server.effective }, server.effective ? t.enabledState : t.disabledState),
+                h('div', { className: 'cc-row-desc' }, server.session === null ? t.followsGlobal : t.sessionOverride)),
+              h(Segmented, { t, label: server.title, value: server.session, disabled: busy, onChange: (value) => change('server', server.name, value) })))) : null,
+          data.skills.length > 0 ? h('div', null,
+            h('div', { className: 'cc-sub' }, `${t.skills} (${data.skills.filter((skill) => skill.effective).length}/${data.skills.length})`),
+            h('input', { className: 'cc-input', type: 'search', placeholder: t.search, value: query, onChange: (event) => setQuery(event.target.value), 'aria-label': t.search, style: { width: '100%', marginBottom: 6 } }),
+            skills.map((skill) => h('div', { className: 'cc-mini-row', key: skill.name },
+              h('div', { className: 'cc-row-main' },
+                h('div', { className: 'cc-row-name', title: skill.summary }, skill.name, skill.effective ? null : h('span', { className: 'cc-row-desc' }, `  · ${t.stateOff}`))),
+              h(Segmented, { t, label: skill.name, value: skill.session, disabled: busy, onChange: (value) => change('skill', skill.name, value) })))) : null)) : null
 
       return h('span', { className: 'cc-anchor', ref: anchor },
         h('button', {
-          type: 'button', className: 'cc-trigger', 'aria-expanded': open, 'aria-haspopup': 'dialog',
-          title: offCount > 0 ? format(t.offCount, { n: offCount }) : t.sessionTitle,
+          ref: trigger, type: 'button', className: 'cc-trigger', 'data-state': choice || undefined, 'aria-expanded': open, 'aria-haspopup': 'dialog',
+          title: [t.sessionTitle, choiceLabel, effectiveLabel].filter(Boolean).join(' · '),
           onClick: () => setOpen((value) => !value),
         },
           h('svg', { width: 14, height: 14, viewBox: '0 0 16 16', 'aria-hidden': true, fill: 'none', stroke: 'currentColor', strokeWidth: 1.5 },
             h('rect', { x: 2, y: 2, width: 5, height: 5, rx: 1 }), h('rect', { x: 9, y: 2, width: 5, height: 5, rx: 1 }),
             h('rect', { x: 2, y: 9, width: 5, height: 5, rx: 1 }), h('rect', { x: 9, y: 9, width: 5, height: 5, rx: 1 })),
-          t.button,
-          offCount > 0 ? h('span', { className: 'cc-trigger-badge' }, `−${offCount}`) : null),
-        open ? h('div', { className: 'cc-popover', role: 'dialog', 'aria-label': t.sessionTitle, style: placement || { visibility: 'hidden' } },
-          h('div', { className: 'cc-popover-head' },
-            h('span', null, t.sessionTitle),
-            h('span', { className: 'cc-toolbar' },
-              h('button', { type: 'button', className: 'cc-btn', onClick: reset }, t.reset),
-              h('button', { type: 'button', className: 'cc-btn', onClick: () => setOpen(false) }, t.close))),
-          h('div', { className: 'cc-note' }, t.sessionNote),
-          error ? h('div', { className: 'cc-warn' }, format(t.error, { message: error.message })) : null,
-          actionError ? h('div', { className: 'cc-warn' }, format(t.error, { message: actionError.message })) : null,
-          !data ? h('div', { className: 'cc-note' }, t.loading) : h('div', { className: 'cc-popover-body' },
-            data.servers.length > 0 ? h('div', null,
-              h('div', { className: 'cc-sub' }, t.servers),
-              data.servers.map((server) => h('div', { className: 'cc-mini-row', key: server.name },
-                h('div', { className: 'cc-row-main' },
-                  h('div', { className: 'cc-row-name' }, server.title),
-                  h('div', { className: 'cc-row-desc' }, format(t.tools, { n: server.tools }))),
-                h(Segmented, { t, label: server.title, value: server.session, onChange: (value) => change('server', server.name, value) })))) : null,
-            data.skills.length > 0 ? h('div', null,
-              h('div', { className: 'cc-sub' }, `${t.skills} (${data.skills.filter((skill) => skill.effective).length}/${data.skills.length})`),
-              h('input', { className: 'cc-input', type: 'search', placeholder: t.search, value: query, onChange: (event) => setQuery(event.target.value), 'aria-label': t.search, style: { width: '100%', marginBottom: 6 } }),
-              skills.map((skill) => h('div', { className: 'cc-mini-row', key: skill.name },
-                h('div', { className: 'cc-row-main' },
-                  h('div', { className: 'cc-row-name', title: skill.summary }, skill.name, skill.effective ? null : h('span', { className: 'cc-row-desc' }, `  · ${t.stateOff}`))),
-                h(Segmented, { t, label: skill.name, value: skill.session, onChange: (value) => change('skill', skill.name, value) })))) : null)) : null)
+          t.button),
+        panel ? createPortal(panel, document.body) : null)
     }
 
     // ---------------------------------------------------------------- plugin
@@ -468,7 +535,7 @@ window.__ModuleLoader__.load({
           }
           function ComposerControl(props) {
             const t = useT()
-            return h(SessionControl, { api, t, sessionId: props.sessionId })
+            return h(SessionControl, { key: props.sessionId, api, t, sessionId: props.sessionId })
           }
           for (const key of BUNDLE_KEYS) {
             remoteCtx.slots.inject('plugins.bundle.config', () => remoteCtx.slots.register({ name: 'plugins.bundle.config', key }, BundleConfig))

@@ -45,11 +45,11 @@ These three tools stay fixed during a session. DSH's other native tools remain a
 
 Requires DSH **`0.2.1-rc.4`** and a Node.js / npm setup able to run REA. Tested on Windows. Launch configuration is included for macOS and Linux, but those platforms have not been tested.
 
-1. Download the prebuilt `dsh-rea-gateway-0.1.0.tgz` from [GitHub Releases](https://github.com/MingoYung/dsh-rea-gateway/releases).
+1. Download the prebuilt `dsh-rea-gateway-0.1.1.tgz` from [GitHub Release v0.1.1](https://github.com/MingoYung/dsh-rea-gateway/releases/tag/v0.1.1).
 2. Use the **`dsh` command supplied by DSH Desktop** to install it into the desktop profile:
 
    ```sh
-   dsh plugin --profile desktop add ./dsh-rea-gateway-0.1.0.tgz
+   dsh plugin --profile desktop add ./dsh-rea-gateway-0.1.1.tgz
    ```
 
 3. Disable any previous direct REA MCP registration in DSH, such as an old `rea-mcp` entry. Keeping both registrations active continues to send the direct registration's full tool definitions.
@@ -67,9 +67,24 @@ The absence of native `mcp__rea__*` tools is expected with the gateway. Use `rea
 | Global REA state | Toggle the REA row under MCP servers in the plugin's REA Gateway settings card |
 | Current session | Click REA on the left of the input box and choose Default, On, or Off |
 
+Every control in the REA popover affects the current session, including the header actions and the options below. Global controls live in the plugin page's REA Gateway settings card.
+
+Follow global clears all overrides for this session without changing global settings; the button is disabled when there are no overrides. Dismiss only hides the panel, preserving saved settings and the input draft. It does not cancel a save already submitted.
+
+The entry shows only the icon and REA at a fixed 60×24 px size, with single-line text to keep the layout stable when state changes. Its border and the selected popover segment indicate the session selection: Default follows the system color, On is green, and Off is blue. The popover shows selection details, effective state, and setting source; the tooltip provides a state summary. Default follows global settings, so its effective state can still be Currently disabled.
+
 REA state resolves in this order: **session override → global override → configured default**. Choosing default clears that override and follows the next layer. The master switch removes the three tools and catalog index. A session can explicitly enable REA while it is globally disabled.
 
 An off state blocks calls and changes the catalog visible to that session. Overrides persist in `DSH_HOME/dsh-rea-gateway/toggles.json`. UI changes update the running state; manual edits to the file require reloading the plugin.
+
+## 0.1.1 session-panel update
+
+- Render the panel at the page level with a solid background so the composer container cannot cover it.
+- Use Follow global and Dismiss for the header actions and make the panel's session scope explicit.
+- Keep only the icon and REA in a fixed 60×24 px entry with single-line text. Default follows the system color, On is green, and Off is blue, matching the selected popover segment.
+- Show state in the popover and tooltip, provide saving/result feedback, and prevent duplicate submissions. The popover can explicitly show Currently disabled while Default follows global settings.
+
+The final local adaptation build passed interactive checks: Default followed the system color, On was green, and Off was blue; the entry stayed 60×24 px with no wrapping in all three states. Saving, Follow global, and Dismiss worked. The original Default state was restored afterward, global settings were unchanged, and the input draft was preserved. Public `0.1.1` uses the same client logic, but the public package has not been installed into production for validation; these UI checks are not a new `0.1.1` headless integration measurement. The `0.1.0` integration data below remains a historical measurement of that version.
 
 ## REA startup and caching
 
