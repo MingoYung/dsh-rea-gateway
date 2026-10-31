@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "passed": true,
+  "date": "2026-10-31",
+  "package": {
+    "name": "dsh-rea-gateway",
+    "version": "0.1.0"
+  },
+  "testedTarballSha256": "73d4cae079e346057407df659ea45e497efa64843ea3c09e9f5ba24161f721c8",
+  "harnessVersion": "0.2.1-rc.4",
+  "hostPlatform": "win32",
+  "reaPackageVersion": "6.5.0",
+  "cleanProfileInstalledThroughNativeCli": true,
+  "nodeModulesJunctionUsed": false,
+  "extraCorePeersInstalled": false,
+  "productionModified": false,
+  "modelRequestsServedByLocalFixture": true,
+  "realModelInvocations": 0,
+  "realReaReadonlyCalls": 2,
+  "totalVerifiedCases": 6,
+  "totalCapturedRequests": 12,
+  "activeGatewayTools": [
+    "rea_call",
+    "rea_describe",
+    "rea_search"
+  ],
+  "activeGatewayToolCount": 3,
+  "activeGatewayToolJsonBytes": 2063,
+  "activeAllToolsCount": 28,
+  "activeAllToolsJsonBytes": 23677,
+  "directReaToolsInRequests": 0,
+  "toolSchemasStableAcrossVerifiedActiveRequests": true,
+  "cases": [
+    {
+      "name": "normal",
+      "passed": true,
+      "requestCount": 1,
+      "gatewayToolCounts": [
+        3
+      ]
+    },
+    {
+      "name": "rea-readonly",
+      "passed": true,
+      "requestCount": 4,
+      "gatewayToolCounts": [
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    {
+      "name": "global-off",
+      "passed": true,
+      "requestCount": 2,
+      "gatewayToolCounts": [
+        3,
+        3
+      ]
+    },
+    {
+      "name": "session-off",
+      "passed": true,
+      "requestCount": 2,
+      "gatewayToolCounts": [
+        3,
+        3
+      ]
+    },
+    {
+      "name": "session-on",
+      "passed": true,
+      "requestCount": 2,
+      "gatewayToolCounts": [
+        3,
+        3
+      ]
+    },
+    {
+      "name": "master-off",
+      "passed": true,
+      "requestCount": 1,
+      "gatewayToolCounts": [
+        0
+      ]
+    }
+  ],
+  "verified": {
+    "ordinaryConversation": true,
+    "searchDescribeRealReaCall": true,
+    "allThreeToolCallsCompleted": true,
+    "globalOffBlocksDispatchAndHidesIndex": true,
+    "sessionOffOverridesGlobalOn": true,
+    "sessionOnOverridesGlobalOffAndCallsRealRea": true,
+    "masterOffRemovesGatewayToolsAndIndex": true
+  },
+  "limits": [
+    "The model endpoint was a scripted local HTTP fixture; no model accuracy or token-count result is claimed.",
+    "Switch states were preset in the plugin-owned store and tested through actual DSH dispatch; this headless run did not click browser controls.",
+    "The earlier native-shell exploratory fixture is excluded from these six passing cases.",
+    "The final release archive may add README and UI wording without changing the tested host tool implementation."
+  ]
+}

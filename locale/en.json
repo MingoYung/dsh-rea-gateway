@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "REA Gateway",
+    "description": "A fork of Capability Catalog: three fixed REA entries, lazy calls, idle shutdown and the native skill catalog preserved."
+  }
+}

@@ -1,10 +1,109 @@
 {
-  "private": true,
-  "name": "dsh-capability-catalog-workspace",
-  "packageManager": "pnpm@11.21.0",
+  "name": "dsh-rea-gateway",
+  "version": "0.1.0",
+  "description": "On-demand REA gateway for DeepSeek Harness: three fixed search, describe and call tools, native controls, cached schemas and durable image results.",
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "cordis",
+    "mcp",
+    "tool-search",
+    "context-optimization",
+    "rea",
+    "reverse-engineering",
+    "lazy-mcp"
+  ],
+  "license": "MIT",
+  "author": "kirkchinese",
+  "type": "module",
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0",
+    "dsh": "0.2.1-rc.4"
+  },
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./server": {
+      "types": "./lib/server.d.ts",
+      "default": "./lib/server.js"
+    },
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json",
+    "./typert": {
+      "types": "./lib/typert.host.d.ts",
+      "default": "./lib/typert.host.js"
+    },
+    "./client": "./client/client.js"
+  },
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "files": [
+    "client/*.js",
+    "lib/**/*.js",
+    "lib/**/*.d.ts",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "README.md",
+    "README.zh.md",
+    "README.en.md",
+    "docs/*.md",
+    "docs/*.json",
+    "LICENSE",
+    "FORK-NOTICE.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-plugin-manager",
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ]
+    }
+  },
   "scripts": {
-    "build": "pnpm --dir packages/capability-catalog build",
-    "typecheck": "pnpm --dir packages/capability-catalog typecheck",
-    "test": "pnpm --dir packages/capability-catalog test"
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test tests/*.test.mjs",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/client": "2.2.0",
+    "ajv": "8.20.0"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "4.0.5",
+    "@deepseek-ai/schemastery": "3.18.5",
+    "@deepseek-ai/dsh-subprocess": "0.2.1-rc.4",
+    "@deepseek-ai/dsh-typert-protocol": "0.2.1-rc.4",
+    "@deepseek-ai/dsh-mcp-client": "0.2.1-rc.4",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "4.0.5",
+    "@deepseek-ai/schemastery": "3.18.5",
+    "@deepseek-ai/dsh-subprocess": "0.2.1-rc.4",
+    "@deepseek-ai/dsh-mcp-client": "0.2.1-rc.4",
+    "@types/node": "^24.10.0",
+    "typescript": "^5.9.3",
+    "@deepseek-ai/dsh-typert-protocol": "0.2.1-rc.4",
+    "zod": "4.4.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MingoYung/dsh-rea-gateway.git"
+  },
+  "homepage": "https://github.com/MingoYung/dsh-rea-gateway#readme",
+  "bugs": {
+    "url": "https://github.com/MingoYung/dsh-rea-gateway/issues"
   }
 }

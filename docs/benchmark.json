@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "measurement_date": "2026-10-31",
+  "project": "dsh-rea-gateway",
+  "upstream": {
+    "repository": "https://github.com/kirkchinese/dsh-capability-catalog",
+    "version": "0.1.4",
+    "license": "MIT"
+  },
+  "privacy": {
+    "raw_requests_included": false,
+    "conversations_included": false,
+    "machine_paths_included": false,
+    "credentials_included": false,
+    "exact_private_sample_reproducible_from_repository": false
+  },
+  "token_count_pair": {
+    "rea_version": "6.5.0",
+    "rea_tool_count": 207,
+    "original_error_prompt_tokens": 287065,
+    "reconstructed_full_prompt_tokens": 284483,
+    "reconstructed_without_rea_prompt_tokens": 34239,
+    "paired_delta_tokens": 250244,
+    "original_error_minus_full_reconstruction_tokens": 2582,
+    "original_vs_reconstruction_discrepancy_explained": false,
+    "method": {
+      "service": "Strata",
+      "endpoint": "POST /v1/messages/count_tokens",
+      "request_format": "Anthropic-style system, messages, and tools",
+      "reconstructed_user_content_items": 5,
+      "tool_field_mapping": "name, description, parameters -> input_schema",
+      "counter": "Serving Qwen tokenizer and chat template through encode_prompt(store=False)",
+      "template_and_tool_rendering_included": true,
+      "real_model_inference": false,
+      "paired_change": "Remove only the 207 REA entries from the tools array; keep the rest of the reconstructed request and counting path unchanged"
+    },
+    "generalization": {
+      "tokens_per_request_guaranteed": false,
+      "monetary_savings_measured": false,
+      "cache_billing_latency_effects_measured": false
+    }
+  },
+  "local_adaptation_integration": {
+    "package_version": "0.1.4-local.1",
+    "dsh_version": "0.2.1-rc.4",
+    "platform": "Windows",
+    "profile_kind": "headless",
+    "actual_built_tarball_installed": true,
+    "model_endpoint": "Local HTTP test fixture with fixed responses and scripted tool calls",
+    "real_model_inference": false,
+    "model_usage_values_are_synthetic": true,
+    "captured_model_http_requests": 13,
+    "gateway_tools": ["capability_search", "capability_describe", "capability_call"],
+    "gateway_tool_count": 3,
+    "gateway_tools_openai_json_utf8_bytes": 2098,
+    "native_tool_count": 25,
+    "combined_tool_count": 28,
+    "combined_tools_openai_json_utf8_bytes": 23712,
+    "raw_rea_tools_in_model_tools_array": 0,
+    "gateway_schema_size_stable_after_tool_use": true,
+    "real_rea_version": "6.5.0",
+    "readonly_operation_verified": "binary_session",
+    "cases_passed": [
+      "Native working-directory read",
+      "Search -> describe -> real REA read-only call",
+      "Global off blocks call",
+      "Session off overrides global on",
+      "Session on overrides global off",
+      "Master off removes gateway tools"
+    ],
+    "toggle_states_preset_in_plugin_store": true,
+    "browser_click_controls_verified": false,
+    "desktop_total_tool_count_claimed": false
+  },
+  "public_release": {
+    "package": "dsh-rea-gateway",
+    "version": "0.1.0",
+    "gateway_tools": ["rea_search", "rea_describe", "rea_call"],
+    "remote_namespace": "reaGateway",
+    "definition_json_utf8_bytes": 1970,
+    "definition_json_shape": "Array of {name, description, parameters}; not the full OpenAI tools-array wrapper",
+    "actual_request_retest_status": "passed",
+    "dsh_version": "0.2.1-rc.4",
+    "platform": "Windows",
+    "profile_kind": "headless",
+    "actual_built_tarball_installed": true,
+    "real_model_inference": false,
+    "verified_case_count": 6,
+    "captured_model_http_requests": 12,
+    "gateway_tools_openai_json_utf8_bytes": 2063,
+    "gateway_schema_size_stable_after_tool_use": true,
+    "native_tool_count": 25,
+    "combined_tool_count": 28,
+    "combined_tools_openai_json_utf8_bytes": 23677,
+    "raw_rea_tools_in_model_tools_array": 0,
+    "cases_passed": [
+      "Ordinary model request",
+      "rea_search -> rea_describe -> real REA read-only call",
+      "Global off blocks dispatch and hides index",
+      "Session off overrides global on",
+      "Session on overrides global off and calls real REA",
+      "Master off removes gateway tools and index"
+    ],
+    "real_rea_version": "6.5.0",
+    "real_rea_readonly_calls": 2,
+    "global_session_toggle_cases_repeated_for_public_release": true,
+    "toggle_states_preset_in_plugin_store": true,
+    "master_off_gateway_tool_count": 0,
+    "master_off_native_tool_count": 25,
+    "browser_click_controls_verified": false,
+    "desktop_total_tool_count_claimed": false
+  }
+}

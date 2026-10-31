@@ -1,0 +1,14 @@
+{
+  "tested_archive_sha256": "73d4cae079e346057407df659ea45e497efa64843ea3c09e9f5ba24161f721c8",
+  "runtime_files_compared": 30,
+  "byte_identical_runtime_files": 29,
+  "host_tool_implementation_byte_identical": true,
+  "client_ui_wording_only_changes": [
+    "client/client.js"
+  ],
+  "client_wording_keys": [
+    "noServers",
+    "globalNote"
+  ],
+  "note": "Release documentation and packaging metadata were added. Host tool/runtime files match the tested archive byte for byte; the client differs only in missing-server/help wording and line endings. Headless integration does not validate browser UI."
+}

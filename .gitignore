@@ -1,9 +1,4 @@
 node_modules/
-scratch/
 *.tgz
+*.log
 .DS_Store
-lib/
-media/source/
-media/out/
-media/frames/
-media/render/.promo.build.html
