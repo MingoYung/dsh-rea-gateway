@@ -45,6 +45,8 @@ These three tools stay fixed during a session. DSH's other native tools remain a
 
 Requires DSH **`0.2.1-rc.4`** and a Node.js / npm setup able to run REA. Tested on Windows. Launch configuration is included for macOS and Linux, but those platforms have not been tested.
 
+Within the same DSH profile, do not install and enable this gateway alongside the upstream capability catalog (`@kirkchinese/dsh-capability-catalog`) or `@kirkchinese/dsh-rea`. Disable or uninstall other REA integrations before installing this gateway to avoid duplicate catalogs, controls, and connections. This plugin does not migrate or disable those integrations automatically.
+
 1. Download the prebuilt `dsh-rea-gateway-0.1.1.tgz` from [GitHub Release v0.1.1](https://github.com/MingoYung/dsh-rea-gateway/releases/tag/v0.1.1).
 2. Use the **`dsh` command supplied by DSH Desktop** to install it into the desktop profile:
 

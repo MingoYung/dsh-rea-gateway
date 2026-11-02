@@ -45,6 +45,8 @@ flowchart LR
 
 要求 DSH **`0.2.1-rc.4`**，以及可运行 REA 的 Node.js / npm。已实测 Windows；macOS 和 Linux 的启动配置已提供，尚未实测。
 
+同一 DSH profile 内，请勿将本网关与上游能力目录（`@kirkchinese/dsh-capability-catalog`）或 `@kirkchinese/dsh-rea` 同装启用。请先停用或卸载其他 REA 集成，再安装本网关，避免两套目录、开关和连接。本插件不会自动迁移或代为停用这些集成。
+
 1. 从 [GitHub Release v0.1.1](https://github.com/MingoYung/dsh-rea-gateway/releases/tag/v0.1.1) 下载预构建包 `dsh-rea-gateway-0.1.1.tgz`。
 2. 使用 **DSH Desktop 自带的 `dsh` 命令**安装到桌面 profile：
 
