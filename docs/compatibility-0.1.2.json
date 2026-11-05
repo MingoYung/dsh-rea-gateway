@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "passed": true,
+  "measuredAt": "2026-11-05T05:03:04.655Z",
+  "runtime": {
+    "desktop": "2.0.22-next",
+    "node": "24.21.0",
+    "electron": "44.7.0",
+    "packages": {
+      "dsh": "0.2.2-rc.1",
+      "cordis": "4.1.0",
+      "schemastery": "3.19.0",
+      "dsh-mcp-client": "0.2.2-rc.1",
+      "dsh-typert-protocol": "0.2.2-rc.1",
+      "dsh-subprocess": "0.2.2-rc.1"
+    }
+  },
+  "package": {
+    "name": "dsh-rea-gateway",
+    "version": "0.1.2"
+  },
+  "cases": [
+    {
+      "name": "normal",
+      "passed": true,
+      "requests": 1,
+      "toolCounts": [
+        26
+      ],
+      "gatewayToolCounts": [
+        3
+      ]
+    },
+    {
+      "name": "readonly-chain",
+      "passed": true,
+      "requests": 4,
+      "toolCounts": [
+        26,
+        26,
+        26,
+        26
+      ],
+      "gatewayToolCounts": [
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    {
+      "name": "all-off",
+      "passed": true,
+      "requests": 2,
+      "toolCounts": [
+        26,
+        26
+      ],
+      "gatewayToolCounts": [
+        3,
+        3
+      ]
+    },
+    {
+      "name": "session-off",
+      "passed": true,
+      "requests": 2,
+      "toolCounts": [
+        26,
+        26
+      ],
+      "gatewayToolCounts": [
+        3,
+        3
+      ]
+    },
+    {
+      "name": "session-on",
+      "passed": true,
+      "requests": 2,
+      "toolCounts": [
+        26,
+        26
+      ],
+      "gatewayToolCounts": [
+        3,
+        3
+      ]
+    },
+    {
+      "name": "master-off",
+      "passed": true,
+      "requests": 1,
+      "toolCounts": [
+        23
+      ],
+      "gatewayToolCounts": [
+        0
+      ]
+    }
+  ],
+  "gatewayToolBytes": 2063,
+  "gatewaySchemaFingerprint": "f2ce12359e4e1bcb921177529c81e522dbf0120bb52b11b7b9503f50bba3d936",
+  "realReaReadonlyCalls": [
+    {
+      "case": "readonly-chain",
+      "name": "rea-agents",
+      "version": "6.5.0",
+      "serverVersion": "6.5.0"
+    },
+    {
+      "case": "session-on",
+      "name": "rea-agents",
+      "version": "6.5.0",
+      "serverVersion": "6.5.0"
+    }
+  ],
+  "capturedCaseRequests": 12,
+  "realModelInvocations": 0,
+  "rawReaSchemasInModelTools": 0,
+  "productionModified": false,
+  "boundaries": [
+    "Scripted loopback model, not a model-quality/token/latency benchmark.",
+    "Plugin-owned switches were preset; no browser-click acceptance is claimed.",
+    "Native tool counts are observations from this host, not fixed expected values.",
+    "Only newly created isolated test sessions and one metadata schema cache were used."
+  ],
+  "capturedPreludeRequests": 2,
+  "capturedTotalRequests": 14,
+  "sdkRegression": {
+    "current": {
+      "dsh": "0.2.2-rc.1",
+      "typecheck": true,
+      "build": true,
+      "testsPassed": 26
+    },
+    "previous": {
+      "dsh": "0.2.1-rc.4",
+      "typecheck": true,
+      "build": true,
+      "testsPassed": 26
+    },
+    "previousDesktopBinaryRerun": false
+  },
+  "testedInstallationArchiveSha256": "f660946d1b26f906e808505c1d356904ca12ee5f631de15fde4cf3b81b91d1d6",
+  "releaseArchiveDifference": "The final release adds current README wording and this report. The tested host implementation and client code are unchanged."
+}

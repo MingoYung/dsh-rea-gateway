@@ -4,7 +4,7 @@
 
 给 DeepSeek Harness（DSH）提供按需加载的 REA 工具入口：模型常驻看到 `rea_search`、`rea_describe`、`rea_call` 三个工具，完整 REA 参数定义保存在本地缓存，使用时再检索、查看和调用。
 
-本项目派生自 **[kirkchinese/dsh-capability-catalog 0.1.4](https://github.com/kirkchinese/dsh-capability-catalog)**，沿用上游的能力目录设计与实现，并保留原作者及 MIT 许可。这个分支收窄到 REA，加入独立命名、默认配置与 DSH `0.2.1-rc.4` 适配；详见 [FORK-NOTICE.md](FORK-NOTICE.md)。
+本项目派生自 **[kirkchinese/dsh-capability-catalog 0.1.4](https://github.com/kirkchinese/dsh-capability-catalog)**，沿用上游的能力目录设计与实现，并保留原作者及 MIT 许可。这个分支收窄到 REA，加入独立命名、默认配置与 DSH `0.2.1-rc.4` / `0.2.2-rc.1` 适配；详见 [FORK-NOTICE.md](FORK-NOTICE.md)。
 
 ## 为什么做这个
 
@@ -43,15 +43,15 @@ flowchart LR
 
 ## 安装
 
-要求 DSH **`0.2.1-rc.4`**，以及可运行 REA 的 Node.js / npm。已实测 Windows；macOS 和 Linux 的启动配置已提供，尚未实测。
+要求 DSH **`0.2.1-rc.4` 或 `0.2.2-rc.1`**，以及可运行 REA 的 Node.js / npm。已实测 Windows；macOS 和 Linux 的启动配置已提供，尚未实测。
 
 同一 DSH profile 内，请勿将本网关与上游能力目录（`@kirkchinese/dsh-capability-catalog`）或 `@kirkchinese/dsh-rea` 同装启用。请先停用或卸载其他 REA 集成，再安装本网关，避免两套目录、开关和连接。本插件不会自动迁移或代为停用这些集成。
 
-1. 从 [GitHub Release v0.1.1](https://github.com/MingoYung/dsh-rea-gateway/releases/tag/v0.1.1) 下载预构建包 `dsh-rea-gateway-0.1.1.tgz`。
+1. 从 [GitHub Release v0.1.2](https://github.com/MingoYung/dsh-rea-gateway/releases/tag/v0.1.2) 下载预构建包 `dsh-rea-gateway-0.1.2.tgz`。
 2. 使用 **DSH Desktop 自带的 `dsh` 命令**安装到桌面 profile：
 
    ```sh
-   dsh plugin --profile desktop add ./dsh-rea-gateway-0.1.1.tgz
+   dsh plugin --profile desktop add ./dsh-rea-gateway-0.1.2.tgz
    ```
 
 3. 在 DSH 中关闭旧的 REA 直连 MCP 注册，例如原先的 `rea-mcp`。保留直连与网关两条注册，会继续把旧的全量定义送给模型。
@@ -78,6 +78,14 @@ flowchart LR
 REA 的状态优先级为 **会话覆盖 → 全局覆盖 → 配置默认值**。“默认”清除当前覆盖并沿用下一层。总开关关闭时，三个入口与索引都停止提供；REA 全局关闭时，某个会话仍可明确设为开启。
 
 关闭状态会拦截调用，也会影响该会话可见的目录。状态保存在 `DSH_HOME/dsh-rea-gateway/toggles.json`；通过界面更改可更新运行状态，手动编辑该文件需要重新加载插件。
+
+## 0.1.2 DSH 兼容更新
+
+旧版将 `engines.dsh` 精确声明为 `0.2.1-rc.4`，新版 DSH 的安装门禁据此拒绝安装并回滚。`0.1.2` 将 DSH engines 和三个 DSH peer 的范围更新为 `0.2.1-rc.4 || 0.2.2-rc.1`，Cordis peer 更新为 `4.0.5 || 4.1.0`，Schemastery peer 更新为 `3.18.5 || 3.19.0`，开发依赖固定到当前 SDK。本次改动沿用现有 MCP 和 Remote 接口实现。
+
+新旧两套 SDK 环境均已通过类型检查、构建及现有 26/26 项测试。旧版 Desktop 尚未重新运行验收。
+
+新版 Desktop `2.0.22-next` 已通过 6 个隔离用例，包括普通请求、检索到真实 REA 只读调用、全局关闭、会话关闭、会话开启覆盖全局关闭，以及总开关关闭。共捕获 12 次用例请求和 2 次会话准备请求，均由本机脚本模型端点响应；两次真实 `binary_session({})` 调用确认 REA `6.5.0`。启用网关时仅三个入口，合计 2,063 UTF-8 字节；总开关关闭后为零。详见 [0.1.2 兼容验证](docs/compatibility-0.1.2.json)。
 
 ## 0.1.1 会话弹窗更新
 
@@ -117,6 +125,6 @@ npm test
 npm run build
 ```
 
-开发依赖需要与项目声明的 DSH rc.4 peer 版本一致。发布包包含构建后的 `lib`；终端用户可直接安装 Release 中的 tarball。
+开发依赖固定为 DSH `0.2.2-rc.1`、Cordis `4.1.0` 和 Schemastery `3.19.0`。发布包包含构建后的 `lib`；终端用户可直接安装 Release 中的 tarball。
 
 上游作者：kirkchinese。上游项目：[dsh-capability-catalog](https://github.com/kirkchinese/dsh-capability-catalog)。本分支维护：[MingoYung/dsh-rea-gateway](https://github.com/MingoYung/dsh-rea-gateway)。许可：[MIT](LICENSE)。

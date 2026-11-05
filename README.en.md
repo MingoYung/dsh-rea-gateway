@@ -4,7 +4,7 @@
 
 An on-demand REA tool gateway for DeepSeek Harness (DSH). The model sees three persistent tools—`rea_search`, `rea_describe`, and `rea_call`—while full REA parameter schemas stay in a local catalog and are read when needed.
 
-This project is derived from **[kirkchinese/dsh-capability-catalog 0.1.4](https://github.com/kirkchinese/dsh-capability-catalog)**. It retains the upstream catalog design, implementation, original attribution, and MIT license. This fork focuses on REA, with separate names, defaults, and DSH `0.2.1-rc.4` integration. See [FORK-NOTICE.md](FORK-NOTICE.md).
+This project is derived from **[kirkchinese/dsh-capability-catalog 0.1.4](https://github.com/kirkchinese/dsh-capability-catalog)**. It retains the upstream catalog design, implementation, original attribution, and MIT license. This fork focuses on REA, with separate names, defaults, and integration with DSH `0.2.1-rc.4` / `0.2.2-rc.1`. See [FORK-NOTICE.md](FORK-NOTICE.md).
 
 ## Why this exists
 
@@ -43,15 +43,15 @@ These three tools stay fixed during a session. DSH's other native tools remain a
 
 ## Installation
 
-Requires DSH **`0.2.1-rc.4`** and a Node.js / npm setup able to run REA. Tested on Windows. Launch configuration is included for macOS and Linux, but those platforms have not been tested.
+Requires DSH **`0.2.1-rc.4` or `0.2.2-rc.1`** and a Node.js / npm setup able to run REA. Tested on Windows. Launch configuration is included for macOS and Linux, but those platforms have not been tested.
 
 Within the same DSH profile, do not install and enable this gateway alongside the upstream capability catalog (`@kirkchinese/dsh-capability-catalog`) or `@kirkchinese/dsh-rea`. Disable or uninstall other REA integrations before installing this gateway to avoid duplicate catalogs, controls, and connections. This plugin does not migrate or disable those integrations automatically.
 
-1. Download the prebuilt `dsh-rea-gateway-0.1.1.tgz` from [GitHub Release v0.1.1](https://github.com/MingoYung/dsh-rea-gateway/releases/tag/v0.1.1).
+1. Download the prebuilt `dsh-rea-gateway-0.1.2.tgz` from [GitHub Release v0.1.2](https://github.com/MingoYung/dsh-rea-gateway/releases/tag/v0.1.2).
 2. Use the **`dsh` command supplied by DSH Desktop** to install it into the desktop profile:
 
    ```sh
-   dsh plugin --profile desktop add ./dsh-rea-gateway-0.1.1.tgz
+   dsh plugin --profile desktop add ./dsh-rea-gateway-0.1.2.tgz
    ```
 
 3. Disable any previous direct REA MCP registration in DSH, such as an old `rea-mcp` entry. Keeping both registrations active continues to send the direct registration's full tool definitions.
@@ -78,6 +78,14 @@ The entry shows only the icon and REA at a fixed 60×24 px size, with single-lin
 REA state resolves in this order: **session override → global override → configured default**. Choosing default clears that override and follows the next layer. The master switch removes the three tools and catalog index. A session can explicitly enable REA while it is globally disabled.
 
 An off state blocks calls and changes the catalog visible to that session. Overrides persist in `DSH_HOME/dsh-rea-gateway/toggles.json`. UI changes update the running state; manual edits to the file require reloading the plugin.
+
+## 0.1.2 DSH compatibility update
+
+The previous package declared an exact `engines.dsh` value of `0.2.1-rc.4`, so the newer DSH installation gate rejected the installation and rolled it back. Release `0.1.2` sets the DSH engine and three DSH peers to `0.2.1-rc.4 || 0.2.2-rc.1`, the Cordis peer to `4.0.5 || 4.1.0`, and the Schemastery peer to `3.18.5 || 3.19.0`. Development dependencies are pinned to the current SDK. The existing MCP and Remote interface implementations are retained.
+
+Both SDK environments passed type checking, the build, and all 26 existing tests. The older Desktop runtime has not been rerun.
+
+Desktop `2.0.22-next` passed six isolated cases covering an ordinary request, search through a real read-only REA call, global off, session off, session on overriding global off, and master off. Twelve case requests and two session-setup requests were served by a scripted loopback model endpoint; two real `binary_session({})` calls confirmed REA `6.5.0`. The enabled gateway exposed only three tools totaling 2,063 UTF-8 bytes, and master off exposed none. See the [0.1.2 compatibility results](docs/compatibility-0.1.2.json).
 
 ## 0.1.1 session-panel update
 
@@ -117,6 +125,6 @@ npm test
 npm run build
 ```
 
-Development dependencies must match the declared DSH rc.4 peers. Release tarballs contain the built `lib` directory and can be installed directly.
+Development dependencies are pinned to DSH `0.2.2-rc.1`, Cordis `4.1.0`, and Schemastery `3.19.0`. Release tarballs contain the built `lib` directory and can be installed directly.
 
 Upstream author: kirkchinese. Upstream: [dsh-capability-catalog](https://github.com/kirkchinese/dsh-capability-catalog). Fork maintenance: [MingoYung/dsh-rea-gateway](https://github.com/MingoYung/dsh-rea-gateway). License: [MIT](LICENSE).
